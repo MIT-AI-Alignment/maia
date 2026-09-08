@@ -19,7 +19,11 @@ export const CONFIG = {
             ctaText: "Go to Orientation 2026",
             dismissText: "Maybe later",
             href: "/orientation-2026/"
-        }
+        },
+        // The printed banner + foam-board QR codes encode the bare homepage URL (and MIT's http->https
+        // redirect drops any path), so the homepage sends phone visitors that arrive with no referrer
+        // (= QR scans) straight to the form, once per device. Set to "" to turn this off.
+        homepageQrRedirectUntil: "2026-10-01"
     },
     // TODO: See if up to date.
     mailingListLink: "https://mailchi.mp/0b6484dd282e/public",

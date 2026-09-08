@@ -21,11 +21,31 @@
 	];
 
 	const bookablePeople = getBookablePeople();
+
+	// Inline <head> script: runs before first paint on a full load of "/" only (client-side navigation
+	// to "/" does not re-run head scripts). Phones that land here with no referrer are QR scans of the
+	// printed Orientation 2026 banner, so send them to the interest form once. `?noredirect` skips it.
+	const qrRedirectScript = CONFIG.orientation.homepageQrRedirectUntil
+		? `<script>(function(){
+	if (Date.now() > Date.parse(${JSON.stringify(CONFIG.orientation.homepageQrRedirectUntil)})) return;
+	if (location.search.indexOf('noredirect') !== -1 || document.referrer) return;
+	var ua = navigator.userAgent;
+	var phone = /Android|iPhone|iPad|iPod/i.test(ua) || (navigator.maxTouchPoints > 1 && /Macintosh/.test(ua));
+	if (!phone) return;
+	var key = 'orientation2026QrRedirected';
+	try { if (localStorage.getItem(key)) return; localStorage.setItem(key, '1'); } catch (e) {}
+	location.replace(${JSON.stringify(CONFIG.orientation.interestFormLink)});
+})();<\/script>`
+		: '';
 	
 	onMount(() => {
 		mounted = true;
 	});
 </script>
+
+<svelte:head>
+	{@html qrRedirectScript}
+</svelte:head>
 
 <PageLayout
 	title="MIT AI Alignment"
