@@ -1,20 +1,11 @@
 <script lang="ts">
 	import { RESEARCH_PAPERS } from '$lib/researchShowcase';
-	import { PAPERS } from '$lib/papers';
-	const featuredLinks = new Set([
-		'https://arxiv.org/pdf/2502.01628',
-		'https://arxiv.org/abs/2412.14093',
-		'https://arxiv.org/abs/2511.18397'
-	]);
-	const featured = RESEARCH_PAPERS.filter((paper) => featuredLinks.has(paper.link)).map(
-		(paper) => ({
-			...paper,
-			imgSrc:
-				paper.link === 'https://arxiv.org/abs/2511.18397'
-					? '/images/papers/natural-emergent-misalignment.png'
-					: PAPERS.find((original) => original.link === paper.link)!.imgSrc
-		})
-	);
+	import { RESEARCH_HIGHLIGHTS, CITATIONS_CHECKED } from '$lib/researchHighlights';
+	const featured = RESEARCH_HIGHLIGHTS.map((highlight) => {
+		const paper = RESEARCH_PAPERS.find((paper) => paper.link.endsWith(highlight.id));
+		if (!paper) throw new Error('Missing highlighted paper: ' + highlight.id);
+		return { ...paper, ...highlight, imgSrc: '/images/papers/' + highlight.image };
+	});
 
 	const dateFormat = new Intl.DateTimeFormat('en-US', {
 		month: 'long',
@@ -45,10 +36,12 @@
 			</a>
 			<h4><a href={paper.link} target="_blank" rel="noopener noreferrer">{paper.title}</a></h4>
 			<time datetime={paper.date}>{formatDate(paper.date)}</time>
+			<a class="citation-count" href={'https://openalex.org/' + paper.openAlex} target="_blank" rel="noopener noreferrer">{paper.citations} indexed citations</a>
 			<p class="authors">MAIA coauthors: {paper.authors.join(', ')}</p>
 		</article>
 	{/each}
 </div>
+<p class="citation-note">Citation counts from OpenAlex, checked {formatDate(CITATIONS_CHECKED)}. Coverage varies; zero means no citations indexed in that record.</p>
 <h3 class="section-label">All research</h3>
 
 <div class="research-grid not-prose">
@@ -112,6 +105,8 @@
 		margin: 2rem 0 1rem;
 		font-size: 1.25rem;
 	}
+	.citation-count, .citation-note { font-size: 0.8125rem; }
+	.citation-note { margin-top: 1rem; }
 	.featured-grid {
 		display: grid;
 		gap: 1.5rem;

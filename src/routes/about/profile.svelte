@@ -384,7 +384,7 @@
 >
 	{#if name && imageUrl}
 		<div class="flex items-center">
-			<img src={imageUrl} alt={name} class="rounded-lg h-24 w-24 object-cover shrink-0" />
+			<img src={imageUrl} alt={name} loading="lazy" decoding="async" class="rounded-lg h-24 w-24 object-cover shrink-0" />
 			<div class="flex flex-col ml-4 mr-4 min-w-0">
 				<p class="text-xl font-heading font-[550] leading-none m-0">{name}</p>
 				<p class="text-sm text-maia-800 dark:text-maia-400 leading-none m-0 mt-0.5">{subtitle || position}</p>

@@ -50,12 +50,19 @@
 
 {#if isMobile}
   <div class="w-full">
+    {#if !item.dropdownItems}
+      <a class="flex min-h-11 items-center gap-2 px-6 py-3" href={item.href}>
+        <i class="{item.icon} w-5 text-center"></i><span>{item.label}</span>
+      </a>
+    {:else}
     <button
       class="px-6 py-2 w-full text-left flex items-center justify-between transition-colors duration-200
              {isActive
                ? 'text-maia-800 dark:text-maia-400 bg-maia-50 dark:bg-maia-950/30'
                : 'hover:bg-maia-50 dark:hover:bg-maia-950/30'}"
       on:click={handleClick}
+      aria-expanded={activeDropdown === item.label}
+      style="min-height:44px"
     >
       <div class="flex items-center gap-2">
         <i class="{item.icon} w-5 text-center"></i>
@@ -65,6 +72,7 @@
         <i class="fas fa-chevron-{activeDropdown === item.label ? 'up' : 'down'} text-xs opacity-70"></i>
       {/if}
     </button>
+    {/if}
 
     {#if item.dropdownItems && activeDropdown === item.label}
       <div transition:slide={{ duration: 200 }}
@@ -72,7 +80,7 @@
         {#each item.dropdownItems as subItem}
           <a
             href={subItem.href}
-            class="px-12 py-2 block w-full text-left transition-colors duration-200
+            class="px-12 py-3 min-h-11 block w-full text-left transition-colors duration-200
                    {$page.url.pathname + $page.url.hash === subItem.href || $page.url.pathname === subItem.href.split('#')[0]
                     ? 'text-maia-800 dark:text-maia-400 bg-maia-100/50 dark:bg-maia-950/40'
                     : 'hover:bg-maia-100/50 dark:hover:bg-maia-950/40'}"

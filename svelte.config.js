@@ -18,7 +18,10 @@ const config = {
 			strict: true
 		}),
 		prerender: {
-			handleHttpError: 'ignore'
+			handleHttpError: ({ path, message }) => {
+				// Never publish a build that silently dropped the calendar page.
+				if (path.replace(/\/$/, '') === '/events') throw new Error(message);
+			}
 		}
 	},
 

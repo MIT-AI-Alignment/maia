@@ -66,7 +66,7 @@
 	// Set up scroll listener
 	onMount(() => {
 		if (browser) {
-			window.addEventListener('scroll', handleScroll);
+			window.addEventListener('scroll', handleScroll, { passive: true });
 			handleScroll(); // Initial check
 			
 			return () => {
@@ -133,7 +133,7 @@
 				
 				<!-- Desktop Navigation -->
 				<nav
-					class="hidden md:flex items-center space-x-1"
+					class="hidden xl:flex items-center space-x-1"
 					on:mouseenter={() => (isNavHovering = true)}
 					on:mouseleave={() => (isNavHovering = false)}
 				>
@@ -179,10 +179,10 @@
 				</nav>
 				
 				<!-- Mobile Menu Button -->
-				<div class="flex md:hidden">
+				<div class="flex xl:hidden">
 				<button
 					type="button"
-					class="inline-flex items-center justify-center p-2 rounded-md text-maia-950 dark:text-maia-100
+					class="inline-flex min-h-11 min-w-11 items-center justify-center p-2 rounded-md text-maia-950 dark:text-maia-100
 							hover:text-maia-800 dark:hover:text-maia-400 hover:bg-maia-50 dark:hover:bg-maia-950/30
 							focus:outline-none focus:ring-2 focus:ring-inset focus:ring-maia-500"
 						aria-expanded={isMobileMenuOpen}
