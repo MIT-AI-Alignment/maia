@@ -521,10 +521,10 @@ export const getOrganizers = () =>
 export const getPeopleByProject = (projectId: string) =>
 	Object.values(PEOPLE).filter((person) => person.projects?.includes(projectId));
 
-// Active executives with a public booking link for the homepage contact section.
+// Active executives with a booking link or MIT email for the homepage contact section.
 export const getBookablePeople = () =>
 	Object.values(PEOPLE)
-		.filter((person) => person.isActive && person.isExec && !!person.calendly)
+		.filter((person) => person.isActive && person.isExec && !!(person.calendly || person.mitEmail))
 		.sort((a, b) => {
 			const orderA = a.execOrder ?? 999;
 			const orderB = b.execOrder ?? 999;

@@ -42,9 +42,9 @@
 	<!-- Hero Section -->
 	<div class="bg-gradient-to-b {$theme === 'dark' 
 		? 'from-maia-500/5 via-maia-500/3 to-transparent' 
-		: 'from-maia-500/3 via-maia-500/2 to-transparent'} pt-32 pb-12 relative z-10">
-		<div class="px-8 md:px-24 mx-auto max-w-6xl">
-			<h1 class="pt-16 text-4xl md:text-5xl lg:text-6xl font-heading font-[550] mb-6 {centerTitle ? 'text-center' : ''}">
+		: 'from-maia-500/3 via-maia-500/2 to-transparent'} pt-10 md:pt-32 pb-8 md:pb-12 relative z-10">
+		<div class="px-5 sm:px-8 md:px-24 mx-auto max-w-6xl">
+			<h1 class="pt-6 md:pt-16 text-4xl md:text-5xl lg:text-6xl font-heading font-[550] mb-6 {centerTitle ? 'text-center' : ''}">
 				{#if heroIcon}
 					<i class="{heroIcon} mr-3 text-maia-800 dark:text-maia-500"></i>
 				{/if}
@@ -55,7 +55,7 @@
 	</div>
 	
 	<!-- Main Content -->
-	<div class="px-8 md:px-24 mx-auto max-w-6xl pb-16 relative z-10">
+	<div class="px-5 sm:px-8 md:px-24 mx-auto max-w-6xl pb-16 relative z-10">
 		<slot />
 	</div>
 	
@@ -82,4 +82,4 @@
 	:global(.prose li) {
 		@apply mb-0;
 	}
-</style> 
+</style>

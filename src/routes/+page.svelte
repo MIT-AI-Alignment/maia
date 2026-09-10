@@ -3,6 +3,7 @@
 	import Button from '../components/Button.svelte';
 	import { CONFIG } from '$lib/config';
 	import { getBookablePeople } from '$lib/people';
+	import { RESEARCH_PAPERS } from '$lib/researchShowcase';
 	import Orgs from './components/orgs.svelte';
 	import { onMount } from 'svelte';
 	import { fly, scale } from 'svelte/transition';
@@ -17,7 +18,8 @@
 	];
 	const maiaStats = [
 		{ value: '300+', label: 'active members' },
-		{ value: '1,000+', label: 'people in the MAIA Slack community' }
+		{ value: '1,300+', label: 'people in the MAIA Slack community' },
+		{ value: String(RESEARCH_PAPERS.length), label: 'papers by members and alumni' }
 	];
 
 	const bookablePeople = getBookablePeople();
@@ -158,7 +160,7 @@
 		<p class="mt-3 text-lg text-maia-950/80 dark:text-maia-100/80">
 			A student-run community at MIT and beyond.
 		</p>
-		<div class="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2">
+		<div class="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-3">
 			{#each maiaStats as stat}
 				<div>
 					<p class="font-heading text-4xl font-[550] leading-none text-maia-800 dark:text-maia-400">
@@ -326,7 +328,7 @@
 						href={person.calendly ?? `mailto:${person.mitEmail}`}
 						target={person.calendly ? '_blank' : undefined}
 						rel={person.calendly ? 'noopener noreferrer' : undefined}
-						class="group flex w-[calc((100%-0.5rem)/2)] sm:w-[calc((100%-2rem)/3)] lg:w-[calc((100%-4rem)/5)] flex-col items-center text-center p-4 rounded-lg bg-surface-light-elevated dark:bg-surface-dark-elevated border border-maia-200 dark:border-maia-800 hover:border-maia-800 dark:hover:border-maia-400 hover:shadow-maia transition-all duration-200"
+						class="group flex w-[calc((100%-1rem)/2)] sm:w-[calc((100%-2rem)/3)] lg:w-[calc((100%-4rem)/5)] flex-col items-center text-center p-4 rounded-lg bg-surface-light-elevated dark:bg-surface-dark-elevated border border-maia-200 dark:border-maia-800 hover:border-maia-800 dark:hover:border-maia-400 hover:shadow-maia transition-all duration-200"
 						in:fly={{ y: 18, duration: 500, delay: 100 + index * 80 }}
 					>
 						<img
@@ -353,7 +355,7 @@
 						href={person.calendly ?? `mailto:${person.mitEmail}`}
 						target={person.calendly ? '_blank' : undefined}
 						rel={person.calendly ? 'noopener noreferrer' : undefined}
-						class="group flex w-[calc((100%-0.5rem)/2)] sm:w-[calc((100%-2rem)/3)] lg:w-[calc((100%-4rem)/5)] flex-col items-center text-center p-4 rounded-lg bg-surface-light-elevated dark:bg-surface-dark-elevated border border-maia-200 dark:border-maia-800 hover:border-maia-800 dark:hover:border-maia-400 hover:shadow-maia transition-all duration-200"
+						class="group flex w-[calc((100%-1rem)/2)] sm:w-[calc((100%-2rem)/3)] lg:w-[calc((100%-4rem)/5)] flex-col items-center text-center p-4 rounded-lg bg-surface-light-elevated dark:bg-surface-dark-elevated border border-maia-200 dark:border-maia-800 hover:border-maia-800 dark:hover:border-maia-400 hover:shadow-maia transition-all duration-200"
 					>
 						<img
 							src={person.imageUrl}

@@ -12,6 +12,7 @@
 		<img 
 			{src} 
 			{alt} 
+			loading="lazy" decoding="async"
 			class="w-full object-cover" 
 			style="{height ? `height: ${height};` : ''}" 
 		/>
@@ -21,4 +22,4 @@
 			</p>
 		</div>
 	</div>
-</div> 
+</div>

@@ -16,6 +16,16 @@ export const NAVIGATION_ITEMS = [
 		]
 	},
 	{
+		label: 'Events',
+		href: '/events/',
+		icon: 'fas fa-calendar',
+		dropdownItems: [
+			{ href: '/events/#upcoming', label: 'Upcoming events' },
+			{ href: '/events/#past', label: 'Past events & initiatives' },
+			{ href: '/orientation-2026/', label: 'Orientation 2026' }
+		]
+	},
+	{
 		label: 'Research',
 		href: '/initiatives',
 		icon: 'fas fa-flask',

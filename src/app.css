@@ -205,6 +205,17 @@ main .w-16.h-1 {
   display: none;
 }
 
+/* Respect device text sizing and the reduced-motion preference (Neha's mobile pass). */
+html { -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}
+
 /* 
 @font-face {
     font-family: 'Commit Mono';

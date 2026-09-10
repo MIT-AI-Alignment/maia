@@ -1,4 +1,5 @@
 import { PAPERS } from './papers';
+import { RESEARCH_UPDATES } from './researchUpdates';
 
 // Curated from Gabriel's research shortlist, reviewed September 2026.
 // Keep contribution and alumni eligibility review in the draft PR before publication.
@@ -228,7 +229,7 @@ const publicationDates: Record<string, string> = {
 	'https://arxiv.org/abs/2410.07095': '2024-10-09'
 };
 
-export const RESEARCH_PAPERS: ResearchPaper[] = [
+const previousPapers: ResearchPaper[] = [
 	...PAPERS.map((paper) => {
 		const url = new URL(paper.link);
 		const id =
@@ -256,4 +257,7 @@ export const RESEARCH_PAPERS: ResearchPaper[] = [
 		if (!date) throw new Error(`Missing research publication date: ${paper.title}`);
 		return { ...paper, date };
 	})
+	.sort((a, b) => b.date.localeCompare(a.date) || a.title.localeCompare(b.title));
+
+export const RESEARCH_PAPERS = [...previousPapers, ...RESEARCH_UPDATES]
 	.sort((a, b) => b.date.localeCompare(a.date) || a.title.localeCompare(b.title));

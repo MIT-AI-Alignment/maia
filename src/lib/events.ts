@@ -1,86 +1,63 @@
 export type CalendarEvent = {
-	title: string;
-	start: string;
-	end?: string;
-	description?: string;
-	location?: string;
+ id: string;
+ title: string;
+ start: string;
+ end?: string;
+ description?: string;
+ location?: string;
+ url?: string;
+ kind?: 'event' | 'initiative';
+ dateLabel?: string;
 };
 
-function valueFor(event: string, property: string) {
-	return event.match(new RegExp(`^${property}(?:;[^:]*)?:(.*)$`, 'm'))?.[1];
-}
-
-function clean(value?: string) {
-	// HTML line breaks, block endings, and links glued to the next word become spaces.
-	return value
-		?.replace(/\\n/g, ' ')
-		.replace(/\\,/g, ',')
-		.replace(/\\;/g, ';')
-		.replace(/\\\\/g, '\\')
-		.replace(/<br\s*\/?>|<\/(?:p|div|li)>|<\/a>(?=\w)/gi, ' ')
-		.replace(/<[^>]*>/g, '')
-		.replace(/\s+/g, ' ')
-		.trim();
-}
-
-export function readCalendarEvents(calendar: string): CalendarEvent[] {
-	return calendar
-		.replace(/\r?\n[ \t]/g, '')
-		.split('BEGIN:VEVENT')
-		.slice(1)
-		.map((event) => {
-			const start = valueFor(event, 'DTSTART');
-			const end = valueFor(event, 'DTEND');
-			return {
-				title: clean(valueFor(event, 'SUMMARY')) ?? '',
-				start: start ?? '',
-				end,
-				description: clean(valueFor(event, 'DESCRIPTION')),
-				location: clean(valueFor(event, 'LOCATION'))
-			};
-		})
-		.filter((event) => event.title && event.start)
-		.sort((a, b) => a.start.localeCompare(b.start));
-}
+const zone = 'America/New_York';
+const isDay = (value: string) => value.length === 10;
+export const localDate = (date: Date) => new Intl.DateTimeFormat('en-CA', {
+ timeZone: zone, year: 'numeric', month: '2-digit', day: '2-digit'
+}).format(date);
 
 export function displayDate(value: string) {
-	const date = new Date(`${value.slice(0, 4)}-${value.slice(4, 6)}-${value.slice(6, 8)}T00:00:00Z`);
-	return new Intl.DateTimeFormat('en-US', {
-		month: 'short',
-		day: 'numeric',
-		year: 'numeric',
-		timeZone: 'UTC'
-	}).format(date);
+ return new Intl.DateTimeFormat('en-US', {
+  month: 'short', day: 'numeric', year: 'numeric', timeZone: isDay(value) ? 'UTC' : zone
+ }).format(new Date(isDay(value) ? value + 'T12:00:00Z' : value));
 }
 
 export function displayTime(value: string) {
-	const match = value.match(/T(\d{2})(\d{2})/);
-	if (!match) return;
-
-	if (value.endsWith('Z')) {
-		const date = new Date(
-			Date.UTC(
-				Number(value.slice(0, 4)),
-				Number(value.slice(4, 6)) - 1,
-				Number(value.slice(6, 8)),
-				Number(match[1]),
-				Number(match[2])
-			)
-		);
-		return new Intl.DateTimeFormat('en-US', {
-			hour: 'numeric',
-			minute: '2-digit',
-			timeZone: 'America/New_York'
-		}).format(date);
-	}
-
-	const hour = Number(match[1]);
-	return `${hour % 12 || 12}:${match[2]} ${hour >= 12 ? 'PM' : 'AM'}`;
+ if (isDay(value)) return;
+ return new Intl.DateTimeFormat('en-US', {
+  hour: 'numeric', minute: '2-digit', timeZone: zone
+ }).format(new Date(value));
 }
 
 export function displayTimeRange(start: string, end?: string) {
-	const startTime = displayTime(start);
-	const endTime = end ? displayTime(end) : undefined;
-	if (!startTime) return;
-	return endTime ? `${startTime}–${endTime}` : startTime;
+ const startTime = displayTime(start);
+ if (!startTime) return;
+ if (!end || end === start) return startTime;
+ const endTime = displayTime(end);
+ if (!endTime) return startTime;
+ return startTime + '–' + (displayDate(start) === displayDate(end) ? '' : displayDate(end) + ', ') + endTime;
+}
+
+export function displayDateRange(event: CalendarEvent) {
+ if (event.dateLabel) return event.dateLabel;
+ if (!event.end || !isDay(event.start) || !isDay(event.end)) return displayDate(event.start);
+ // iCalendar all-day DTEND is exclusive.
+ const lastDay = new Date(event.end + 'T12:00:00Z');
+ lastDay.setUTCDate(lastDay.getUTCDate() - 1);
+ const end = lastDay.toISOString().slice(0, 10);
+ return end > event.start ? displayDate(event.start) + ' – ' + displayDate(end) : displayDate(event.start);
+}
+
+export function splitEvents(events: CalendarEvent[], now = new Date()) {
+ const upcoming: CalendarEvent[] = [], past: CalendarEvent[] = [];
+ for (const event of events) {
+  const end = event.end || event.start;
+  const active = isDay(end)
+   ? (event.end && event.end !== event.start ? end > localDate(now) : end >= localDate(now))
+   : new Date(end).getTime() >= now.getTime();
+  (active ? upcoming : past).push(event);
+ }
+ upcoming.sort((a, b) => a.start.localeCompare(b.start));
+ past.sort((a, b) => b.start.localeCompare(a.start));
+ return { upcoming, past };
 }
