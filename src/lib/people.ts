@@ -254,6 +254,7 @@ export const PEOPLE: Record<string, Person> = {
 		position: 'Exec',
 		imageUrl: 'https://ca.slack-edge.com/T040KLU5EHM-U09HZL7LYGN-757fb16f89da-512',
 		mitEmail: 'igstan@mit.edu',
+		calendly: 'https://calendar.app.google/GL1Zcbd9FEFQTQPr9',
 		linkedin: 'https://www.linkedin.com/in/stan-ionut-gabriel-3a8aa71a5/',
 		isExec: true,
 		isOrg: false,
