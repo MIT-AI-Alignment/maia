@@ -250,7 +250,7 @@ export const PEOPLE: Record<string, Person> = {
 
 	'ionut-gabriel-stan': {
 		id: 'ionut-gabriel-stan',
-		name: 'Ionut Gabriel Stan',
+		name: 'Ionut Stan',
 		position: 'Exec',
 		imageUrl: 'https://ca.slack-edge.com/T040KLU5EHM-U09HZL7LYGN-757fb16f89da-512',
 		mitEmail: 'igstan@mit.edu',
